@@ -1,0 +1,69 @@
+#loginBox, #logoutBox{
+  display: block;
+  min-height: 1.75em;
+  background-color:#42175C;
+  font-family: "Trebuchet MS";
+  color: white;
+  border: 1.5px solid #;
+}
+/*Gold: BF9646
+Light Gold: EECA84
+Light Purple: B08DC0
+Dark Purple: 67337F
+Darker Purple: 29063F
+Darkerer What We are using for EventBox/LoginBox Purple: 42175C
+Green: 4C9F3B*/
+.inMonthCell{
+  background-color:#BF9646;
+}
+.outMonthCell{
+  background-color:#EECA84;
+}
+.todayCell{
+  background-color:#980503;
+}
+.eventBox{
+  background-color:#7C5494;
+  border-radius: 10px;
+  border: 2px /*solid #No color*/;
+}
+h2{
+  color: white;
+}
+body{
+  font-family: "Trebuchet MS";
+  background-color:#200049;
+}
+th{
+  background-color: #67337F;
+  color:white;
+}
+#editEventBox{
+  display: block;
+  min-height: 4em;
+  width:15em;
+  margin-left: auto;
+  margin-right: auto;
+  background-color:#67337F;
+  border-radius: 10px;
+  font-family: "Trebuchet MS";
+  font-size: 13px;
+}
+#completeShareBox{
+  display: block;
+  min-height: 1.5em;
+  width: 28em;
+  background-color:#67337F;
+  border-radius: 10px;
+  font-family: "Trebuchet MS";
+  font-size: 15px;
+}
+/*Placeholder Font*/
+input::-webkit-input-placeholder{
+  /*For Chrome, Safari*/
+  font-family: "Trebuchet MS";
+}
+input::-moz-placeholder{
+  /*For Firefox*/
+  font-family: "Trebuchet MS";
+}
