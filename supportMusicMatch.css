@@ -9,7 +9,7 @@ body{
 }
 #theBoxBorder{
 	border-radius: 25px;
-	padding: 20px;
+	padding: 30px;
 	background-color:#000000;
-	opacity: 0.6;
+	opacity: 0.3;
 }
