@@ -1,8 +1,7 @@
 body{
   font-family: "Arial";
-  background-color:#342011;
+  background-color:#000a47;
   border-radius: 10px;
-  color: #000a47;
   padding: 10px;
 }
 #theBoxBorder{
@@ -11,10 +10,10 @@ body{
 	padding-bottom: 30px;
 	padding-left: 30px;
 	padding-right: 30px;
-	background-color:#cfffac
+	background-color:#405bff
 }
 .fontTitle{
-  color: #b28000;
+  color: #1e36c8;
 }
 .fontEmphasized{
   font-style: italic
