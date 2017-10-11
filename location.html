@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Javascript Location</title>
+	<link rel="stylesheet" type="text/css" href="location.css" />
+</head>
+<body>
+	<h3>Finding Your Location</h3>
+	<p id="statusMsg"></p>
+	<p id="coords_lat">Not Set Yet</p>
+	<p id="coords_long">Not Set Yet</p>
+	
+	<script type-"text/javascript">
+		alert("testing oh yeah");
+		
+		if ("geolocation" in navigator){
+			alert("Geolocation WORKS in your browser");
+		} else {
+			alert("Geolocation DOES NOT WORK in your browser");
+		}
+		
+		function updateUI_positions(latitude, longitude){
+				document.getElementById("coords_lat").value=latitude;
+				document.getElementById("coords_long").value=longitude;
+		}
+		
+		//Following lines based off of	//https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation
+		//As soon as page loads
+		function location_success(position){
+			document.getElementById("statusMsg").value="Success";
+			updateUI_positions(position.coords.latitude, position.coords.longitude);
+		}
+		
+		//NOTE: I don't know which of these 2 functions will be called if an error occurs.
+		function location_error(error){
+			alert("location_error: ERROR(" + error.code + "): "+error.message);
+		}
+		
+		function errorCallback(error){
+			alert("errorCallback: ERROR(" + error.code + "): "+error.message);
+		}
+		function stopWatching(){
+			navigator.geolocation.clear(watchId);
+		}
+		
+		var location_options = {
+			enableHighAccuracy: true,
+			maximumAge: 30000,
+			timeout: 27000
+		};
+		
+		var watchId = navigator.geolocation.watchPosition(location_success, location_error, location_options);
+		
+		
+	</script>
+</body>
+</html>
