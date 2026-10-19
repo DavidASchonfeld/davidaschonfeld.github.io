@@ -1,20 +1,684 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>David Schonfeld Home Page</title>
-    <link rel="stylesheet" type="text/css" href="index.css" />
-  </head>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>David A. Schonfeld — Software Engineer</title>
+<meta name="description" content="Portfolio of David A. Schonfeld, software engineer working across full-stack web (React, C#/.NET) and Python data engineering.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0A0C10}
+html{scroll-behavior:smooth}
+a{color:#E8ECF1;text-decoration:none}
+a:hover{color:#FFFFFF}
+</style>
+<style>
+:root{--accent:#5EE6C8;color-scheme:dark}
+.filter{min-height:44px;padding:0 18px;border-radius:999px;border:1px solid #2A3340;background:transparent;color:#C9D1DC;font:500 14px Inter,system-ui,sans-serif;cursor:pointer}
+.filter[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#04140F}
+.chip{display:inline-flex;align-items:center;padding:10px 16px;border-radius:10px;border:1px solid #222B36;background:#0F1318;color:#E8ECF1;font:14px "JetBrains Mono",ui-monospace,Menlo,monospace;transition:opacity .2s,border-color .2s}
+.chip.dim{opacity:.35;color:#8792A2}
+.chip.hl{border-color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.chip{transition:none}}
+</style>
+<script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('js');</script>
+<style id="motion">
+:root{--ease:cubic-bezier(.2,.8,.2,1)}
+html{scroll-padding-top:84px}
+body{overflow-x:clip}
+::selection{background:var(--accent);color:#04140F}
 
-  <body>
-	<div id="theBoxBorder">
-		<h1 class="fontTitle">David Schonfeld's Website</h1>
-		
-		<p>
-			This website is currently undergoing construction.
-			<br>To check out the Melody Quiz app page, click <a href="/melodyquiz.html">here</a>.
-		</p>
-		
-	</div>
+/* scroll progress */
+.progress{position:fixed;top:0;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:0 50%;z-index:100;pointer-events:none}
 
-  </body>
+/* sticky glass header */
+.site-header{position:sticky;top:0;z-index:50;background:rgba(10,12,16,.55);-webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px);transition:background .3s}
+.site-header.scrolled{background:rgba(10,12,16,.86)}
+.header-inner{transition:padding .35s var(--ease)}
+.site-header.scrolled .header-inner{padding-top:10px!important;padding-bottom:10px!important}
+.nav-link{position:relative;color:#9AA4B2;transition:color .25s}
+.nav-link:hover,.nav-link.active{color:#E8ECF1}
+.nav-link::after{content:"";position:absolute;left:12px;right:12px;bottom:5px;height:1.5px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.nav-link.active::after{transform:scaleX(1)}
+
+/* hero dot field */
+#top{position:relative;isolation:isolate}
+#top::before,#top::after{content:"";position:absolute;z-index:-1;top:-40px;bottom:-60px;left:50%;width:100vw;translate:-50% 0;pointer-events:none;background-size:28px 28px}
+#top::before{background-image:radial-gradient(circle,#1C2430 1.2px,transparent 1.7px);-webkit-mask-image:linear-gradient(#000 35%,transparent);mask-image:linear-gradient(#000 35%,transparent)}
+#top::after{opacity:0}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){
+  #top::after{opacity:1;background-image:radial-gradient(circle,var(--accent) 1.3px,transparent 1.9px);
+    -webkit-mask-image:radial-gradient(260px circle at var(--mx,-999px) var(--my,-999px),rgba(0,0,0,.8),transparent 72%);
+            mask-image:radial-gradient(260px circle at var(--mx,-999px) var(--my,-999px),rgba(0,0,0,.8),transparent 72%)}
+}
+
+/* typing caret */
+.caret{display:inline-block;width:8px;height:1.15em;margin-left:2px;vertical-align:-.22em;background:var(--accent);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* reveal system (only when motion is allowed) */
+.js [data-reveal]{opacity:0;translate:0 36px;filter:blur(6px);
+  transition:opacity .9s var(--ease) var(--d,0s),translate 1s var(--ease) var(--d,0s),filter .9s var(--ease) var(--d,0s),scale 1s var(--ease) var(--d,0s)}
+.js [data-reveal="scale"]{translate:0 24px;scale:.96}
+.js [data-reveal="fade"]{translate:none;filter:none}
+.js [data-reveal].in{opacity:1;translate:none;scale:none;filter:none}
+
+/* word-by-word headline reveal */
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em}
+.w>span{display:inline-block}
+.js .split .w>span{translate:0 108%;transition:translate 1.1s var(--ease) var(--d,0s)}
+.js .split.in .w>span{translate:none}
+
+/* skill chips pop-in */
+.js .chip.pre{opacity:0}
+.chip.pop{animation:pop .7s var(--ease) backwards;animation-delay:var(--d,0s)}
+@keyframes pop{from{opacity:0;translate:0 14px;scale:.85}}
+::view-transition-group(*){animation-duration:.55s;animation-timing-function:var(--ease)}
+::view-transition-old(root),::view-transition-new(root){animation:none}
+
+/* experience rules draw in */
+.xp-row{position:relative;border-top-color:transparent!important}
+.xp-row::before{content:"";position:absolute;top:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--accent),#1C232D 45%);transform-origin:left}
+.js .xp-row::before{transform:scaleX(0);transition:transform 1.4s var(--ease) .1s}
+.js .xp-row.in::before{transform:scaleX(1)}
+
+/* build checklist ticks in sequence */
+.js .step{opacity:0;translate:-14px 0;transition:opacity .6s var(--ease) var(--d,0s),translate .6s var(--ease) var(--d,0s)}
+.js .in .step{opacity:1;translate:none}
+.js .step>span:first-child{scale:0;transition:scale .55s cubic-bezier(.3,1.7,.5,1) calc(var(--d,0s) + .15s)}
+.js .in .step>span:first-child{scale:1}
+
+/* cursor spotlight + 3D tilt */
+.tilt,.spot{position:relative}
+.tilt::after,.spot::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s;
+  background:radial-gradient(520px circle at var(--x,50%) var(--y,50%),color-mix(in srgb,var(--accent) 11%,transparent),transparent 62%)}
+.tilt:hover::after,.spot:hover::after{opacity:1}
+.tilt{transform-style:preserve-3d;transition:transform .45s var(--ease)}
+.js .tilt[data-reveal]{transition:opacity .9s var(--ease) var(--d,0s),translate 1s var(--ease) var(--d,0s),filter .9s var(--ease) var(--d,0s),scale 1s var(--ease) var(--d,0s),transform .45s var(--ease)}
+.magnetic{transition:transform .4s var(--ease)}
+
+/* scroll-driven effects (native, compositor-run) */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion:no-preference){
+    .progress{animation:progress linear both;animation-timeline:scroll(root)}
+    @keyframes progress{to{transform:scaleX(1)}}
+    #top{animation:heroOut linear both;animation-timeline:scroll(root);animation-range:0 85vh}
+    @keyframes heroOut{to{opacity:.15;translate:0 -70px;scale:.97}}
+    #contact h2{animation:ctaGrow linear both;animation-timeline:view();animation-range:entry 0% cover 42%}
+    @keyframes ctaGrow{from{scale:.82;opacity:.35}}
+    #projects article:first-of-type{animation:lift linear both;animation-timeline:view();animation-range:entry 0% cover 35%}
+    @keyframes lift{from{box-shadow:0 0 0 0 transparent}to{box-shadow:0 40px 80px -40px rgba(0,0,0,.8)}}
+  }
+}
+</style>
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+<div style="background: #0A0C10; color: #E8ECF1; font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif; font-size: 16px; line-height: 1.6; min-height: 100vh">
+
+  <!-- NAV -->
+  <header class="site-header" style="border-bottom: 1px solid #1C232D">
+    <div class="header-inner" style="max-width: 1180px; margin: 0 auto; padding: 18px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+      <a href="#top" style="display: flex; align-items: center; gap: 12px; font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 14px; color: #E8ECF1">
+        <span style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--accent); color: var(--accent); font-weight: 500">DS</span>
+        <span>david.schonfeld</span>
+      </a>
+      <nav aria-label="Primary" style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px; font-size: 14px">
+        <a href="#about" class="nav-link" style="padding: 10px 12px">About</a>
+        <a href="#skills" class="nav-link" style="padding: 10px 12px">Skills</a>
+        <a href="#experience" class="nav-link" style="padding: 10px 12px">Experience</a>
+        <a href="#projects" class="nav-link" style="padding: 10px 12px">Projects</a>
+        <a href="#education" class="nav-link" style="padding: 10px 12px">Education</a>
+        <a href="mailto:DavidASchonfeld@gmail.com" style="margin-left: 8px; padding: 10px 16px; border-radius: 8px; background: var(--accent); color: #04140F; font-weight: 600">Get in touch</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="top" style="max-width: 1180px; margin: 0 auto; padding: 96px 24px 72px; display: flex; flex-wrap: wrap; align-items: center; gap: 56px">
+    <div style="flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 28px">
+      <div style="display: inline-flex; align-self: flex-start; align-items: center; gap: 10px; padding: 8px 14px; border: 1px solid #1F2732; border-radius: 999px; font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 13px; color: #9AA4B2">
+        <span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent)"></span>
+        Open to software engineering roles
+      </div>
+      <h1 style="margin: 0; font-family: Space Grotesk, Inter, system-ui, sans-serif; font-weight: 700; font-size: clamp(44px, 7vw, 84px); line-height: 1.02; letter-spacing: -0.03em">David A.<br>Schonfeld</h1>
+      <p style="margin: 0; max-width: 560px; font-size: 20px; line-height: 1.55; color: #B8C0CC">Software engineer who works across the stack — building <span style="color: #E8ECF1">React and C#/.NET web applications</span> and <span style="color: #E8ECF1">Python data tooling backed by SQL</span>. Computer Science graduate of Washington University in St. Louis.</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px">
+        <a href="#projects" style="display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 10px; background: var(--accent); color: #04140F; font-weight: 600">
+          View projects
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg>
+        </a>
+        <a href="https://github.com/DavidASchonfeld" style="display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 10px; border: 1px solid #2A3340; color: #E8ECF1; font-weight: 500">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6l-6 6 6 6"></path><path d="M16 6l6 6-6 6"></path></svg>
+          GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/davidaschonfeld/" style="display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 10px; border: 1px solid #2A3340; color: #E8ECF1; font-weight: 500">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+
+    <!-- code card -->
+    <div style="flex: 1 1 400px; min-width: 0; border: 1px solid #1F2732; border-radius: 16px; background: #0F1318; overflow: hidden">
+      <div style="display: flex; align-items: center; gap: 8px; padding: 14px 18px; border-bottom: 1px solid #1C232D">
+        <span aria-hidden="true" style="width: 11px; height: 11px; border-radius: 50%; background: #2A3340"></span>
+        <span aria-hidden="true" style="width: 11px; height: 11px; border-radius: 50%; background: #2A3340"></span>
+        <span aria-hidden="true" style="width: 11px; height: 11px; border-radius: 50%; background: #2A3340"></span>
+        <span style="margin-left: 10px; font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #8792A2">profile.ts</span>
+      </div>
+      <div style="padding: 24px 22px 28px; overflow-x: auto; font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 14px; line-height: 1.9; white-space: pre; color: #C9D1DC"><span style="color: #C792EA">const</span> <span style="color: #E8ECF1">engineer</span> = {
+  <span style="color: #82AAFF">name</span>: <span style="color: #F5B65A">"David A. Schonfeld"</span>,
+  <span style="color: #82AAFF">role</span>: <span style="color: #F5B65A">"Software Engineer"</span>,
+  <span style="color: #82AAFF">degree</span>: <span style="color: #F5B65A">"B.S. CS · WashU"</span>,
+  <span style="color: #82AAFF">web</span>: [<span style="color: #F5B65A">"React"</span>, <span style="color: #F5B65A">"TypeScript"</span>, <span style="color: #F5B65A">"C#/.NET"</span>],
+  <span style="color: #82AAFF">data</span>: [<span style="color: #F5B65A">"Python"</span>, <span style="color: #F5B65A">"Pandas"</span>, <span style="color: #F5B65A">"SQL"</span>],
+  <span style="color: #82AAFF">shipping</span>: <span style="color: #C792EA">true</span>,
+};</div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section aria-label="At a glance" style="max-width: 1180px; margin: 0 auto; padding: 0 24px 96px">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); border: 1px solid #1C232D; border-radius: 16px; overflow: hidden; background: #1C232D; gap: 1px">
+      <div style="background: #0D1015; padding: 28px 28px 26px; display: flex; flex-direction: column; gap: 6px">
+        <div style="font-family: Space Grotesk, Inter, sans-serif; font-size: 40px; font-weight: 600; color: var(--accent); line-height: 1.1">3.5 yrs</div>
+        <div style="font-size: 14px; color: #9AA4B2">Professional development at Titan Technologies</div>
+      </div>
+      <div style="background: #0D1015; padding: 28px 28px 26px; display: flex; flex-direction: column; gap: 6px">
+        <div style="font-family: Space Grotesk, Inter, sans-serif; font-size: 40px; font-weight: 600; color: var(--accent); line-height: 1.1">17</div>
+        <div style="font-size: 14px; color: #9AA4B2">Languages, databases &amp; libraries</div>
+      </div>
+      <div style="background: #0D1015; padding: 28px 28px 26px; display: flex; flex-direction: column; gap: 6px">
+        <div style="font-family: Space Grotesk, Inter, sans-serif; font-size: 40px; font-weight: 600; color: var(--accent); line-height: 1.1">2</div>
+        <div style="font-size: 14px; color: #9AA4B2">Stacks — full-stack web and Python data</div>
+      </div>
+      <div style="background: #0D1015; padding: 28px 28px 26px; display: flex; flex-direction: column; gap: 6px">
+        <div style="font-family: Space Grotesk, Inter, sans-serif; font-size: 40px; font-weight: 600; color: var(--accent); line-height: 1.1">1</div>
+        <div style="font-size: 14px; color: #9AA4B2">Published iOS app on the App Store</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT / TWO TRACKS -->
+  <section id="about" style="border-top: 1px solid #1C232D">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 96px 24px; display: flex; flex-direction: column; gap: 48px">
+      <div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-end; justify-content: space-between">
+        <div style="flex: 1 1 520px; display: flex; flex-direction: column; gap: 14px">
+          <div style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 13px; color: var(--accent)">01 / About</div>
+          <h2 style="margin: 0; font-family: Space Grotesk, Inter, sans-serif; font-size: clamp(32px, 4vw, 48px); font-weight: 600; letter-spacing: -0.02em; line-height: 1.1">Two disciplines,<br>one engineer.</h2>
+        </div>
+        <p style="flex: 1 1 380px; margin: 0; font-size: 17px; color: #9AA4B2">Dave is a computer scientist with broad experience in database management and software development, and advanced proficiency in Python. He's equally comfortable designing a React interface as he is writing the SQL and automation behind it.</p>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px">
+        <div style="border: 1px solid #1F2732; border-radius: 16px; background: #0F1318; padding: 32px; display: flex; flex-direction: column; gap: 18px">
+          <div style="display: flex; align-items: center; gap: 14px">
+            <span style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 10px; background: #12221F; color: var(--accent)">
+              <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18"></path><path d="M7 6.5h.01"></path><path d="M10 6.5h.01"></path></svg>
+            </span>
+            <h3 style="margin: 0; font-family: Space Grotesk, Inter, sans-serif; font-size: 22px; font-weight: 600">Full-stack web</h3>
+          </div>
+          <p style="margin: 0; color: #9AA4B2">Front ends in React and TypeScript, back ends in C#/.NET, Node.js and PHP, with MySQL and SQLite underneath. Shipped a React admin page and an Outlook.com contacts integration for a production CRM.</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #C9D1DC">
+            <span style="padding: 6px 10px; border-radius: 6px; background: #161B22">React</span>
+            <span style="padding: 6px 10px; border-radius: 6px; background: #161B22">TypeScript</span>
+            <span style="padding: 6px 10px; border-radius: 6px; background: #161B22">C#/.NET</span>
+            <span style="padding: 6px 10px; border-radius: 6px; background: #161B22">Node.js</span>
+            <span style="padding: 6px 10px; border-radius: 6px; background: #161B22">Tailwind</span>
+          </div>
+        </div>
+        <div style="border: 1px solid #1F2732; border-radius: 16px; background: #0F1318; padding: 32px; display: flex; flex-direction: column; gap: 18px">
+          <div style="display: flex; align-items: center; gap: 14px">
+            <span style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 10px; background: #251D10; color: #F5B65A">
+              <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"></path><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"></path></svg>
+            </span>
+            <h3 style="margin: 0; font-family: Space Grotesk, Inter, sans-serif; font-size: 22px; font-weight: 600">Python &amp; data</h3>
+          </div>
+          <p style="margin: 0; color: #9AA4B2">Advanced Python for automation, scraping and analysis — Selenium, Pandas, Matplotlib — paired with MS SQL scripting that powers reporting dashboards. Comfortable with data wrangling and extract-transform-load work.</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #C9D1DC">
+            <span style="padding: 6px 10px; border-radius: 6px; background: #161B22">Python</span>
+            <span style="padding: 6px 10px; border-radius: 6px; background: #161B22">Pandas</span>
+            <span style="padding: 6px 10px; border-radius: 6px; background: #161B22">Selenium</span>
+            <span style="padding: 6px 10px; border-radius: 6px; background: #161B22">MS SQL</span>
+            <span style="padding: 6px 10px; border-radius: 6px; background: #161B22">ETL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" style="border-top: 1px solid #1C232D; background: #0C0F13">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 96px 24px; display: flex; flex-direction: column; gap: 40px">
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <div style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 13px; color: var(--accent)">02 / Toolkit</div>
+        <h2 style="margin: 0; font-family: Space Grotesk, Inter, sans-serif; font-size: clamp(32px, 4vw, 48px); font-weight: 600; letter-spacing: -0.02em; line-height: 1.1">Skills &amp; technologies</h2>
+      </div>
+      <div role="group" aria-label="Filter skills" style="display: flex; flex-wrap: wrap; gap: 8px">
+        <button type="button" class="filter" data-filter="all" aria-pressed="true">All</button><button type="button" class="filter" data-filter="web" aria-pressed="false">Full-stack web</button><button type="button" class="filter" data-filter="data" aria-pressed="false">Python &amp; data</button><button type="button" class="filter" data-filter="sys" aria-pressed="false">Systems &amp; mobile</button>
+      </div>
+      <div id="chips" style="display: flex; flex-wrap: wrap; gap: 10px"></div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" style="border-top: 1px solid #1C232D">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 96px 24px; display: flex; flex-direction: column; gap: 48px">
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <div style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 13px; color: var(--accent)">03 / Experience</div>
+        <h2 style="margin: 0; font-family: Space Grotesk, Inter, sans-serif; font-size: clamp(32px, 4vw, 48px); font-weight: 600; letter-spacing: -0.02em; line-height: 1.1">Where I've worked</h2>
+      </div>
+
+      <div style="display: flex; flex-direction: column">
+        <!-- Titan -->
+        <div style="display: flex; flex-wrap: wrap; gap: 12px 48px; padding: 36px 0; border-top: 1px solid #1C232D">
+          <div style="flex: 0 1 240px; display: flex; flex-direction: column; gap: 6px">
+            <div style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 13px; color: #9AA4B2">Jan 2019 — Jun 2022</div>
+            <div style="font-size: 14px; color: #8792A2">Derwood, MD</div>
+          </div>
+          <div style="flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+            <div>
+              <h3 style="margin: 0; font-family: Space Grotesk, Inter, sans-serif; font-size: 24px; font-weight: 600">Developer 2</h3>
+              <div style="font-size: 16px; color: var(--accent)">Titan Technologies</div>
+            </div>
+            <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; color: #B8C0CC">
+              <li>Built and maintained a Python + Selenium solution that extracts and analyzes data from an internal third-party website, closing critical information gaps for the team.</li>
+              <li>Updated and maintained MS SQL scripts that calculate the statistics behind the organization's reporting dashboard.</li>
+              <li>Supported and maintained Remedyforce and ServiceNow, enterprise CRM and service-management platforms.</li>
+            </ul>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #9AA4B2">
+              <span style="padding: 5px 10px; border-radius: 6px; border: 1px solid #222B36">Python</span>
+              <span style="padding: 5px 10px; border-radius: 6px; border: 1px solid #222B36">Selenium</span>
+              <span style="padding: 5px 10px; border-radius: 6px; border: 1px solid #222B36">MS SQL</span>
+              <span style="padding: 5px 10px; border-radius: 6px; border: 1px solid #222B36">ServiceNow</span>
+            </div>
+          </div>
+        </div>
+        <!-- WashU TA -->
+        <div style="display: flex; flex-wrap: wrap; gap: 12px 48px; padding: 36px 0; border-top: 1px solid #1C232D">
+          <div style="flex: 0 1 240px; display: flex; flex-direction: column; gap: 6px">
+            <div style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 13px; color: #9AA4B2">Sep 2017 — Dec 2017</div>
+            <div style="font-size: 14px; color: #8792A2">St. Louis, MO</div>
+          </div>
+          <div style="flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+            <div>
+              <h3 style="margin: 0; font-family: Space Grotesk, Inter, sans-serif; font-size: 24px; font-weight: 600">Teaching Assistant</h3>
+              <div style="font-size: 16px; color: var(--accent)">Washington University in St. Louis</div>
+            </div>
+            <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; color: #B8C0CC">
+              <li>Guided students through debugging and answered technical questions in the website programming course.</li>
+              <li>One of three TAs supporting a class of 25, including a weekly two-hour help session.</li>
+            </ul>
+          </div>
+        </div>
+        <!-- LACRM -->
+        <div style="display: flex; flex-wrap: wrap; gap: 12px 48px; padding: 36px 0; border-top: 1px solid #1C232D; border-bottom: 1px solid #1C232D">
+          <div style="flex: 0 1 240px; display: flex; flex-direction: column; gap: 6px">
+            <div style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 13px; color: #9AA4B2">May 2016 — Aug 2016</div>
+            <div style="font-size: 14px; color: #8792A2">St. Louis, MO</div>
+          </div>
+          <div style="flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+            <div>
+              <h3 style="margin: 0; font-family: Space Grotesk, Inter, sans-serif; font-size: 24px; font-weight: 600">Software Developer Intern</h3>
+              <div style="font-size: 16px; color: var(--accent)">Less Annoying CRM</div>
+            </div>
+            <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; color: #B8C0CC">
+              <li>Created a JavaScript integration framework connecting the CRM to Outlook.com contacts.</li>
+              <li>Built a React page that reads and edits records in a MySQL database for customer-facing staff.</li>
+              <li>Migrated an existing PHP page to React.</li>
+            </ul>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #9AA4B2">
+              <span style="padding: 5px 10px; border-radius: 6px; border: 1px solid #222B36">JavaScript</span>
+              <span style="padding: 5px 10px; border-radius: 6px; border: 1px solid #222B36">React</span>
+              <span style="padding: 5px 10px; border-radius: 6px; border: 1px solid #222B36">MySQL</span>
+              <span style="padding: 5px 10px; border-radius: 6px; border: 1px solid #222B36">PHP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" style="border-top: 1px solid #1C232D; background: #0C0F13">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 96px 24px; display: flex; flex-direction: column; gap: 40px">
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <div style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 13px; color: var(--accent)">04 / Projects</div>
+        <h2 style="margin: 0; font-family: Space Grotesk, Inter, sans-serif; font-size: clamp(32px, 4vw, 48px); font-weight: 600; letter-spacing: -0.02em; line-height: 1.1">Selected work</h2>
+      </div>
+
+      <!-- Featured -->
+      <article style="border: 1px solid #1F2732; border-radius: 20px; background: #0F1318; overflow: hidden; display: flex; flex-wrap: wrap">
+        <div style="flex: 1 1 520px; min-width: 0; padding: 40px; display: flex; flex-direction: column; gap: 20px">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+            <span style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; background: #12221F; color: var(--accent); font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px">
+              <span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: var(--accent)"></span>
+              In active development
+            </span>
+            <span style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #8792A2">Feb 2026 — present</span>
+          </div>
+          <h3 style="margin: 0; font-family: Space Grotesk, Inter, sans-serif; font-size: 32px; font-weight: 600; letter-spacing: -0.01em">Movie &amp; Book Listing Platform</h3>
+          <p style="margin: 0; color: #B8C0CC; font-size: 17px">A full-stack web application for cataloguing movies and books, with a typed React front end talking to a C#/.NET API over SQLite. User authentication is built and working; content pages and personal favorites lists come next.</p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px">
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <div style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #8792A2; text-transform: uppercase; letter-spacing: 0.08em">Front end</div>
+              <div style="color: #E8ECF1; font-size: 15px">Vite · React · React Router · TypeScript · Tailwind</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <div style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #8792A2; text-transform: uppercase; letter-spacing: 0.08em">Back end</div>
+              <div style="color: #E8ECF1; font-size: 15px">C# · .NET · SQLite</div>
+            </div>
+          </div>
+          <a href="https://github.com/DavidASchonfeld" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid #2A3340; font-size: 14px; font-weight: 500">
+            View on GitHub
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"></path><path d="M8 7h9v9"></path></svg>
+          </a>
+        </div>
+        <div style="flex: 1 1 360px; min-width: 0; border-left: 1px solid #1C232D; background: #0B0E12; padding: 40px; display: flex; flex-direction: column; gap: 18px">
+          <div style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #8792A2; text-transform: uppercase; letter-spacing: 0.08em">Build progress</div>
+          <div style="display: flex; flex-direction: column; gap: 14px">
+            <div style="display: flex; align-items: center; gap: 12px">
+              <span style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 6px; background: var(--accent); color: #04140F">
+                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg>
+              </span>
+              <span>Project architecture &amp; tooling</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px">
+              <span style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 6px; background: var(--accent); color: #04140F">
+                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg>
+              </span>
+              <span>User login &amp; authentication</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; color: #9AA4B2">
+              <span aria-hidden="true" style="width: 24px; height: 24px; box-sizing: border-box; border-radius: 6px; border: 1.5px solid #3A4554"></span>
+              <span>Create / edit pages for books, movies &amp; authors</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; color: #9AA4B2">
+              <span aria-hidden="true" style="width: 24px; height: 24px; box-sizing: border-box; border-radius: 6px; border: 1.5px solid #3A4554"></span>
+              <span>Personal favorites lists</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; color: #9AA4B2">
+              <span aria-hidden="true" style="width: 24px; height: 24px; box-sizing: border-box; border-radius: 6px; border: 1.5px solid #3A4554"></span>
+              <span>Public deployment</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Smaller projects -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px">
+        <article style="border: 1px solid #1F2732; border-radius: 16px; background: #0F1318; padding: 30px; display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+            <span style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #F5B65A">Published · iOS</span>
+            <span style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #8792A2">2017</span>
+          </div>
+          <h3 style="margin: 0; font-family: Space Grotesk, Inter, sans-serif; font-size: 22px; font-weight: 600">Melody Quiz</h3>
+          <p style="margin: 0; color: #9AA4B2; flex-grow: 1">An iOS game, built and published by Dave, that plays random segments from the user's music library and challenges them to name the song.</p>
+          <div style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #C9D1DC">Swift · Xcode</div>
+        </article>
+        <article style="border: 1px solid #1F2732; border-radius: 16px; background: #0F1318; padding: 30px; display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+            <span style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #F5B65A">Automation</span>
+            <span style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #8792A2">Python</span>
+          </div>
+          <h3 style="margin: 0; font-family: Space Grotesk, Inter, sans-serif; font-size: 22px; font-weight: 600">Card Generator</h3>
+          <p style="margin: 0; color: #9AA4B2; flex-grow: 1">A Python script that reads a custom card game's design data from Excel and generates print-ready playing cards as Microsoft Word documents.</p>
+          <div style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #C9D1DC">Python · Excel · Word automation</div>
+        </article>
+        <article style="border: 1px solid #1F2732; border-radius: 16px; background: #0F1318; padding: 30px; display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+            <span style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #F5B65A">CLI tool</span>
+            <span style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #8792A2">2017</span>
+          </div>
+          <h3 style="margin: 0; font-family: Space Grotesk, Inter, sans-serif; font-size: 22px; font-weight: 600">Command-Line Tweet Reader</h3>
+          <p style="margin: 0; color: #9AA4B2; flex-grow: 1">A command-line application that fetches and displays tweets from any Twitter user via the platform's API.</p>
+          <div style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #C9D1DC">JavaScript · Node.js</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education" style="border-top: 1px solid #1C232D">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 96px 24px; display: flex; flex-wrap: wrap; gap: 48px">
+      <div style="flex: 1 1 320px; display: flex; flex-direction: column; gap: 14px">
+        <div style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 13px; color: var(--accent)">05 / Education</div>
+        <h2 style="margin: 0; font-family: Space Grotesk, Inter, sans-serif; font-size: clamp(32px, 4vw, 48px); font-weight: 600; letter-spacing: -0.02em; line-height: 1.1">Foundations</h2>
+      </div>
+      <div style="flex: 2 1 560px; min-width: 0; border: 1px solid #1F2732; border-radius: 16px; background: #0F1318; padding: 36px; display: flex; flex-direction: column; gap: 22px">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; align-items: baseline">
+          <div>
+            <h3 style="margin: 0; font-family: Space Grotesk, Inter, sans-serif; font-size: 24px; font-weight: 600">B.S. in Computer Science</h3>
+            <div style="color: var(--accent)">Washington University in St. Louis</div>
+          </div>
+          <div style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 13px; color: #9AA4B2">Graduated Dec 2017</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <div style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 12px; color: #8792A2; text-transform: uppercase; letter-spacing: 0.08em">Relevant coursework</div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px">
+            <div style="padding: 14px 16px; border-radius: 10px; background: #141920; color: #C9D1DC; font-size: 15px">Rapid Prototype Development &amp; Creative Programming</div>
+            <div style="padding: 14px 16px; border-radius: 10px; background: #141920; color: #C9D1DC; font-size: 15px">Mobile Application Development</div>
+            <div style="padding: 14px 16px; border-radius: 10px; background: #141920; color: #C9D1DC; font-size: 15px">Data Structures &amp; Algorithms</div>
+            <div style="padding: 14px 16px; border-radius: 10px; background: #141920; color: #C9D1DC; font-size: 15px">Object-Oriented Software Development Lab</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" style="border-top: 1px solid #1C232D; background: #0C0F13">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 112px 24px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 26px">
+      <div style="font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 13px; color: var(--accent)">06 / Contact</div>
+      <h2 style="margin: 0; font-family: Space Grotesk, Inter, sans-serif; font-size: clamp(36px, 6vw, 68px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05">Let's build something.</h2>
+      <p style="margin: 0; max-width: 520px; color: #9AA4B2; font-size: 18px">Hiring for a full-stack or Python-focused engineer? I'd love to hear about the role.</p>
+      <a href="mailto:DavidASchonfeld@gmail.com" style="display: inline-flex; align-items: center; gap: 12px; min-height: 56px; padding: 0 28px; border-radius: 12px; background: var(--accent); color: #04140F; font-weight: 600; font-size: 17px">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>
+        DavidASchonfeld@gmail.com
+      </a>
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px">
+        <a href="https://github.com/DavidASchonfeld" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid #2A3340; font-size: 15px">github.com/DavidASchonfeld</a>
+        <a href="https://www.linkedin.com/in/davidaschonfeld/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid #2A3340; font-size: 15px">linkedin.com/in/davidaschonfeld</a>
+      </div>
+    </div>
+  </section>
+
+  <footer style="border-top: 1px solid #1C232D">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 28px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-family: JetBrains Mono, ui-monospace, Menlo, monospace; font-size: 13px; color: #8792A2">
+      <span>© 2026 David A. Schonfeld</span>
+      <a href="#top" style="color: #9AA4B2">Back to top ↑</a>
+    </div>
+  </footer>
+
+</div>
+<script>
+(function(){
+  var motion=!matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canHover=matchMedia('(hover: hover)').matches;
+  function $(s,r){return (r||document).querySelector(s);}
+  function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));}
+
+  /* ---------- skills + animated filter ---------- */
+  var skills=[["Python","data"],["Pandas","data"],["Matplotlib","data"],["Selenium","data"],["MS SQL","data web"],["MySQL","data web"],["MongoDB","data web"],["ETL","data"],["Data Wrangling","data"],["JavaScript","web"],["TypeScript","web"],["React","web"],["React Router","web"],["Node.js","web"],["C#","web sys"],[".NET","web"],["PHP","web"],["HTML","web"],["CSS","web"],["Tailwind","web"],["Vite","web"],["SQLite","web data"],["C++","sys"],["Java","sys"],["Swift","sys"],["Visual Basic","sys"],["Arduino","sys"],["PowerShell","sys data"],["Visual Studio","sys web"],["Xcode","sys"],["Eclipse","sys"]];
+  var box=document.getElementById("chips");
+  var chips=skills.map(function(s,i){
+    var el=document.createElement("span");
+    el.className="chip"+(motion?" pre":"");
+    el.textContent=s[0];el.dataset.tags=s[1];
+    el.style.viewTransitionName="chip-"+i;
+    el.addEventListener("animationend",function(){el.classList.remove("pop");});
+    box.appendChild(el);return el;
+  });
+  var buttons=$$(".filter");
+  function apply(f){
+    buttons.forEach(function(b){b.setAttribute("aria-pressed",b.dataset.filter===f?"true":"false");});
+    var on=[],off=[];
+    chips.forEach(function(c){
+      var m=f==="all"||c.dataset.tags.split(" ").indexOf(f)!==-1;
+      c.classList.toggle("dim",!m);c.classList.toggle("hl",m&&f!=="all");
+      (m?on:off).push(c);
+    });
+    on.concat(off).forEach(function(c){box.appendChild(c);});
+  }
+  buttons.forEach(function(b){b.addEventListener("click",function(){
+    var f=b.dataset.filter;
+    if(motion&&document.startViewTransition){document.startViewTransition(function(){apply(f);});}
+    else apply(f);
+  });});
+
+  /* ---------- header, progress, active nav ---------- */
+  var header=$(".site-header"),bar=$(".progress");
+  var nativeProgress=motion&&window.CSS&&CSS.supports("animation-timeline: scroll()");
+  function onScroll(){
+    var y=window.scrollY;
+    header.classList.toggle("scrolled",y>8);
+    if(!nativeProgress){var max=document.documentElement.scrollHeight-innerHeight;bar.style.transform="scaleX("+(max>0?y/max:0)+")";}
+  }
+  addEventListener("scroll",onScroll,{passive:true});onScroll();
+
+  var links={};$$(".nav-link").forEach(function(a){links[a.getAttribute("href").slice(1)]=a;});
+  var navIO=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(!e.isIntersecting)return;
+    Object.keys(links).forEach(function(k){links[k].classList.toggle("active",k===e.target.id);});
+  });},{rootMargin:"-45% 0px -50% 0px"});
+  ["top","about","skills","experience","projects","education","contact"].forEach(function(id){var s=document.getElementById(id);if(s)navIO.observe(s);});
+
+  if(!motion)return;
+
+  /* ---------- helpers ---------- */
+  var hooks=new WeakMap();
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(!e.isIntersecting)return;
+    var el=e.target;el.classList.add("in");
+    var fn=hooks.get(el);if(fn)fn(el);
+    io.unobserve(el);
+  });},{threshold:.12,rootMargin:"0px 0px -6% 0px"});
+  function watch(el,fn){if(!el)return;if(fn)hooks.set(el,fn);io.observe(el);}
+  function tag(el,type,delay){if(!el)return;el.setAttribute("data-reveal",type||"up");if(delay)el.style.setProperty("--d",delay+"s");}
+  function split(el,base,step){
+    var i=0;
+    Array.prototype.slice.call(el.childNodes).forEach(function(n){
+      if(n.nodeType!==3)return;
+      var frag=document.createDocumentFragment();
+      n.data.split(/(\s+)/).forEach(function(part){
+        if(!part)return;
+        if(/^\s+$/.test(part)){frag.appendChild(document.createTextNode(part));return;}
+        var w=document.createElement("span");w.className="w";
+        var s=document.createElement("span");s.textContent=part;s.style.setProperty("--d",(base+i*step).toFixed(2)+"s");i++;
+        w.appendChild(s);frag.appendChild(w);
+      });
+      el.replaceChild(frag,n);
+    });
+    el.classList.add("split");
+  }
+  function scramble(el){
+    var final=el.textContent,pool="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#/<>_",frames=22,f=0;
+    (function tick(){
+      f++;var upto=Math.floor(final.length*f/frames),out="";
+      for(var i=0;i<final.length;i++){var ch=final[i];out+=(i<upto||ch===" ")?ch:pool[Math.floor(Math.random()*pool.length)];}
+      el.textContent=out;if(f<frames)setTimeout(tick,34);else el.textContent=final;
+    })();
+  }
+  function countUp(el){
+    var m=el.dataset.final.match(/^([\d.]+)(.*)$/);if(!m)return;
+    var target=parseFloat(m[1]),dec=(m[1].split(".")[1]||"").length,suf=m[2],t0=null,dur=1600;
+    function step(t){if(!t0)t0=t;var k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,4);
+      el.textContent=(target*e).toFixed(dec)+suf;if(k<1)requestAnimationFrame(step);}
+    requestAnimationFrame(step);
+  }
+
+  /* ---------- hero: orchestrated entrance + typed code ---------- */
+  var hero=document.getElementById("top"),L=hero.children[0],R=hero.children[1];
+  var badge=L.children[0],h1=L.querySelector("h1"),lead=L.querySelector("p"),ctas=L.children[3];
+  tag(badge,"up",.05);split(h1,.15,.09);tag(lead,"up",.5);tag(ctas,"up",.65);tag(R,"scale",.75);
+
+  var code=R.querySelector('[style*="white-space: pre"]'),texts=[];
+  if(code){
+    var tw=document.createTreeWalker(code,NodeFilter.SHOW_TEXT);
+    while(tw.nextNode())texts.push([tw.currentNode,tw.currentNode.data]);
+  }
+  function prepCode(){
+    if(!code)return;
+    code.style.height=code.getBoundingClientRect().height+"px";code.style.boxSizing="border-box";
+    texts.forEach(function(t){t[0].data="";});
+    var caret=document.createElement("span");caret.className="caret";caret.setAttribute("aria-hidden","true");code.appendChild(caret);
+  }
+  function typeCode(){
+    var ti=0,ci=0,last=0;
+    function step(t){
+      var n=last?Math.max(1,Math.round((t-last)/1000*150)):1;last=t;
+      while(n-->0&&ti<texts.length){var full=texts[ti][1];ci++;texts[ti][0].data=full.slice(0,ci);if(ci>=full.length){ti++;ci=0;}}
+      if(ti<texts.length)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  function startHero(){prepCode();[badge,h1,lead,ctas,R].forEach(function(e){e.classList.add("in");});if(code)setTimeout(typeCode,1150);}
+  Promise.race([document.fonts?document.fonts.ready:Promise.resolve(),new Promise(function(r){setTimeout(r,600);})])
+    .then(function(){requestAnimationFrame(function(){requestAnimationFrame(startHero);});});
+
+  if(canHover){
+    document.addEventListener("pointermove",function(e){
+      var r=hero.getBoundingClientRect();
+      hero.style.setProperty("--mx",e.clientX+"px");hero.style.setProperty("--my",(e.clientY-r.top+40)+"px");
+    },{passive:true});
+  }
+
+  /* ---------- section reveals ---------- */
+  $$("section div").filter(function(d){return d.children.length===0&&/^0\d \/ /.test(d.textContent.trim());})
+    .forEach(function(d){tag(d,"fade");watch(d,scramble);});
+  $$("section:not(#top) h2").forEach(function(h){split(h,.08,.07);watch(h);});
+
+  var stats=$('section[aria-label="At a glance"] > div');
+  if(stats){
+    tag(stats,"scale");
+    var nums=$$('[style*="font-size: 40px"]',stats);
+    nums.forEach(function(n){n.dataset.final=n.textContent.trim();var m=n.dataset.final.match(/^([\d.]+)(.*)$/);
+      if(m)n.textContent=(0).toFixed((m[1].split(".")[1]||"").length)+m[2];});
+    watch(stats,function(){nums.forEach(function(n,i){setTimeout(function(){countUp(n);},250+i*130);});});
+  }
+
+  var aboutP=$("#about p");tag(aboutP,"up",.15);watch(aboutP);
+  $$('#about [style*="grid-template-columns"] > div').forEach(function(c,i){tag(c,"up",i*.12);c.classList.add("spot");watch(c);});
+
+  var grp=$("#skills [role=group]");tag(grp,"up");watch(grp);
+  watch(box,function(){chips.forEach(function(c,i){c.style.setProperty("--d",(i*.025).toFixed(3)+"s");c.classList.remove("pre");c.classList.add("pop");});});
+
+  $$('#experience [style*="padding: 36px 0"]').forEach(function(r){r.classList.add("xp-row");tag(r,"up");watch(r);});
+
+  var arts=$$("#projects article");
+  arts.forEach(function(a,i){tag(a,i===0?"scale":"up",i===0?0:(i-1)*.12);a.classList.add("tilt");watch(a);});
+  var pl=$$("#projects div").filter(function(d){return d.children.length===0&&d.textContent.trim()==="Build progress";})[0];
+  if(pl&&pl.nextElementSibling){Array.prototype.slice.call(pl.nextElementSibling.children).forEach(function(it,i){it.classList.add("step");it.style.setProperty("--d",(.4+i*.14).toFixed(2)+"s");});}
+
+  var edu=$('#education [style*="flex: 2 1 560px"]');
+  if(edu){tag(edu,"up");edu.classList.add("spot");watch(edu);
+    $$('[style*="minmax(240px"] > div',edu).forEach(function(c,i){tag(c,"up",.25+i*.08);watch(c);});}
+
+  var ct=$("#contact > div");
+  if(ct)Array.prototype.slice.call(ct.children).forEach(function(c,i){
+    if(c.tagName==="H2"||c.hasAttribute("data-reveal"))return;tag(c,"up",.1+i*.08);watch(c);});
+
+  /* ---------- pointer interactions ---------- */
+  if(canHover){
+    $$(".tilt,.spot").forEach(function(card){
+      var max=card.classList.contains("tilt")?(card===arts[0]?2:5):0;
+      card.addEventListener("pointermove",function(e){
+        var r=card.getBoundingClientRect(),px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;
+        card.style.setProperty("--x",(px*100).toFixed(1)+"%");card.style.setProperty("--y",(py*100).toFixed(1)+"%");
+        if(max)card.style.transform="perspective(1100px) rotateX("+((.5-py)*max).toFixed(2)+"deg) rotateY("+((px-.5)*max).toFixed(2)+"deg)";
+      });
+      card.addEventListener("pointerleave",function(){card.style.transform="";});
+    });
+    $$('a[style*="background: var(--accent)"]').forEach(function(b){
+      b.classList.add("magnetic");
+      b.addEventListener("pointermove",function(e){var r=b.getBoundingClientRect();
+        b.style.transform="translate("+((e.clientX-r.left-r.width/2)*.18).toFixed(1)+"px,"+((e.clientY-r.top-r.height/2)*.3).toFixed(1)+"px)";});
+      b.addEventListener("pointerleave",function(){b.style.transform="";});
+    });
+  }
+})();
+</script>
+</body>
 </html>
